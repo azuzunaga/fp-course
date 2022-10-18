@@ -1,5 +1,5 @@
-# This was only tested against revision ac2d18a7353cd3ac1ba4b5993f2776fe0c5eedc9
-# of https://gitlab.haskell.org/ghc/ghc
+# From https://gist.github.com/Gabriel439/4c0c2a81cc0e089043ed33da5b01fee7
+
 let
   nixpkgs = builtins.fetchTarball {
     url =
@@ -9,7 +9,10 @@ let
 
   config.allowBroken = true;
 
-  pkgs = import nixpkgs { inherit config; };
+  pkgs = import nixpkgs {
+    inherit config;
+    overlays = import ./nix/overlays;
+  };
 
 in pkgs.mkShell {
   nativeBuildInputs = [
@@ -17,9 +20,12 @@ in pkgs.mkShell {
     pkgs.autoconf
     pkgs.python3
     (pkgs.haskell.packages.ghc902.ghcWithPackages
-      (p: [ p.alex p.happy p.haddock p.haskell-language-server ]))
+      (p: [ p.ghc p.alex p.happy p.haddock p.haskell-language-server ]))
     pkgs.sphinx
     pkgs.texlive.combined.scheme-small
     pkgs.gmp
+    pkgs.nixfmt
+    pkgs.stack
+    pkgs.cabal-install
   ];
 }

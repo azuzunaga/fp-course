@@ -9,10 +9,7 @@ let
 
   config.allowBroken = true;
 
-  pkgs = import nixpkgs {
-    inherit config;
-    overlays = import ./nix/overlays;
-  };
+  pkgs = import nixpkgs { inherit config; };
 
 in pkgs.mkShell {
   nativeBuildInputs = [
@@ -25,7 +22,5 @@ in pkgs.mkShell {
     pkgs.texlive.combined.scheme-small
     pkgs.gmp
     pkgs.nixfmt
-    pkgs.stack
-    pkgs.cabal-install
   ];
 }
